@@ -1,6 +1,7 @@
 import os
 from abc import ABC, abstractmethod
 from typing import NamedTuple, Self, Optional
+from urllib import parse
 from urllib.parse import urlparse
 
 from redis.asyncio import Redis
@@ -12,7 +13,7 @@ class WikiPage(NamedTuple):
 
     @classmethod
     def from_full_url(cls, url: str) -> Self:
-        parsed = urlparse(url)
+        parsed = urlparse(parse.unquote_plus(url))
         namespace = parsed.hostname.split(".", 1)[0]
         page = parsed.path.replace("/wiki/", "")
 

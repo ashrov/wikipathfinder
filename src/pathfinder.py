@@ -22,6 +22,19 @@ class PathFinder:
     def __init__(self):
         self._cache = RedisCache()
 
+    async def explore(self, start: str, count: int):
+        path_cache = PathCache()
+
+        path_cache.not_visited_pages.put(await self._get_actual_page_info(start))
+        while not path_cache.not_visited_pages.empty() or len(path_cache.visited_pages) >= count:
+            current = path_cache.not_visited_pages.get()
+            children = await self.get_children(current)
+
+            for child in children:
+                if child not in path_cache.visited_pages:
+                    path_cache.visited_pages.add(child)
+                    path_cache.not_visited_pages.put(child)
+
     async def find_path(self, start: str, end: str) -> list[str]:
         path_cache = PathCache()
 
@@ -31,7 +44,7 @@ class PathFinder:
             children = await self.get_children(current)
 
             for child in children:
-                if child.full_url == end:
+                if child.full_url == parse.unquote_plus(end):
                     return self._restore_path(path_cache, start, end)
 
                 if child not in path_cache.visited_pages:
@@ -43,8 +56,7 @@ class PathFinder:
         current = WikiPage.from_full_url(end)
         path: list[str] = [end]
 
-        while current != WikiPage.from_full_url(start):
-            current = path_cache.paths[current]
+        while current := path_cache.paths.get(current):
             path.insert(0, current.full_url)
 
         return path
