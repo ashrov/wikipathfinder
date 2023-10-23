@@ -1,0 +1,13 @@
+[project]
+
+name = "wikipathfinder"
+version = "0.1"
+description = "Wiki game solution implementation."
+authors = [
+    {name = "Anton Sharovo"}
+]
+dependencies = [
+    "aiohttp",
+    "fastapi[all]",
+    "redis>=5"
+]
