@@ -17,3 +17,14 @@ Wiki game solution implementation. Realised as API.
 ### Exploring
 
 Explore autodocs at http://localhost:45678/docs
+
+### Adding precached data
+
+If API running in the docker, in project directory will be created `redis-damp` folder, 
+it is folder mounted in the docker with redis data dump.
+
+Steps to use your have precached data (redis dump file `'.rdb'`):
+1. Stop docker container with app (if running).
+2. Create `redis-data` folder in your project directory (if not exists).
+3. Place your dump file in data folder with name `dump.rdb`.
+4. Start docker compose again.
