@@ -39,6 +39,12 @@ class PathFinder:
                     path_cache.not_visited_pages.put(child)
 
     async def find_path(self, start_page: WikiPage, end_page: WikiPage) -> list[str]:
+        if start_page == end_page:
+            raise BadUrlError("Equal start and end pages are not allowed")
+
+        if not start_page.page or not end_page.page:
+            raise BadUrlError("Empty page")
+
         path_cache = PathCache()
 
         path_cache.not_visited_pages.put(start_page)

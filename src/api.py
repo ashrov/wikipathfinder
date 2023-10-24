@@ -56,8 +56,8 @@ async def find_path_by_names(namespace: str, start: str, end: str):
     :return: Path list if success.
     """
 
-    start_page = WikiPage(namespace, start)
-    end_page = WikiPage(namespace, end)
+    start_page = WikiPage(namespace, start.strip())
+    end_page = WikiPage(namespace, end.strip())
 
     print(f"Getting path from {start_page} to {end_page}")
     path = await finder.find_path(start_page, end_page)

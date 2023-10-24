@@ -11,7 +11,7 @@ from src.exc import BadUrlError
 
 _WIKI_URL_RE = re.compile(r"^(https://|http://)?"
                           r"[a-z]+\.(m\.)?wikipedia\.org"
-                          r"/wiki/.+")
+                          r"/wiki/\S+$")
 
 
 class WikiPage(NamedTuple):
