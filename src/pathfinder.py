@@ -25,8 +25,11 @@ class PathFinder:
     async def explore(self, start: str, count: int):
         path_cache = PathCache()
 
-        path_cache.not_visited_pages.put(await self._get_actual_page_info(start))
-        while not path_cache.not_visited_pages.empty() and len(path_cache.visited_pages) < count:
+        start_page = await self._get_actual_page_info(start)
+        print(f"Exploring urls from {start_page}. Limit: {count}")
+        path_cache.not_visited_pages.put(start_page)
+        while (not path_cache.not_visited_pages.empty() and
+               len(path_cache.visited_pages) - path_cache.not_visited_pages.qsize() < count):
             current = path_cache.not_visited_pages.get()
             children = await self.get_children(current)
 
