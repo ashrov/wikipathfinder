@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from typing import NamedTuple, Self, Optional
+from typing import NamedTuple
 from urllib import parse
 from urllib.parse import urlparse
 
@@ -11,13 +11,13 @@ class WikiPage(NamedTuple):
     namespace: str
     page: str
 
-    @classmethod
-    def from_full_url(cls, url: str) -> Self:
+    @staticmethod
+    def from_full_url(url: str) -> "WikiPage":
         parsed = urlparse(parse.unquote_plus(url))
         namespace = parsed.hostname.split(".", 1)[0]
         page = parsed.path.replace("/wiki/", "")
 
-        return cls(namespace, page)
+        return WikiPage(namespace, page)
 
     @property
     def full_url(self):

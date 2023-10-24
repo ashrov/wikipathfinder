@@ -26,7 +26,7 @@ class PathFinder:
         path_cache = PathCache()
 
         path_cache.not_visited_pages.put(await self._get_actual_page_info(start))
-        while not path_cache.not_visited_pages.empty() or len(path_cache.visited_pages) >= count:
+        while not path_cache.not_visited_pages.empty() and len(path_cache.visited_pages) < count:
             current = path_cache.not_visited_pages.get()
             children = await self.get_children(current)
 
@@ -37,26 +37,29 @@ class PathFinder:
 
     async def find_path(self, start: str, end: str) -> list[str]:
         path_cache = PathCache()
+        start_page = await self._get_actual_page_info(start)
+        end_page = await self._get_actual_page_info(end)
 
-        path_cache.not_visited_pages.put(await self._get_actual_page_info(start))
+        path_cache.not_visited_pages.put(start_page)
         while not path_cache.not_visited_pages.empty():
             current = path_cache.not_visited_pages.get()
             children = await self.get_children(current)
 
             for child in children:
-                if child.full_url == parse.unquote_plus(end):
-                    return self._restore_path(path_cache, start, end)
-
                 if child not in path_cache.visited_pages:
                     path_cache.visited_pages.add(child)
                     path_cache.not_visited_pages.put(child)
                     path_cache.paths[child] = current
 
-    def _restore_path(self, path_cache: PathCache, start: str, end: str) -> list[str]:
-        current = WikiPage.from_full_url(end)
-        path: list[str] = [end]
+                if child == end_page:
+                    return self._restore_path(path_cache, start_page, end_page)
 
-        while current := path_cache.paths.get(current):
+    def _restore_path(self, path_cache: PathCache, start: WikiPage, end: WikiPage) -> list[str]:
+        path: list[str] = [end.full_url]
+        current = end
+        print(f"Finding path between {end} and {start}")
+        while current != start:
+            current = path_cache.paths.get(current)
             path.insert(0, current.full_url)
 
         return path
