@@ -38,10 +38,8 @@ class PathFinder:
                     path_cache.visited_pages.add(child)
                     path_cache.not_visited_pages.put(child)
 
-    async def find_path(self, start: str, end: str) -> list[str]:
+    async def find_path(self, start_page: WikiPage, end_page: WikiPage) -> list[str]:
         path_cache = PathCache()
-        start_page = await self._get_actual_page_info(start)
-        end_page = await self._get_actual_page_info(end)
 
         path_cache.not_visited_pages.put(start_page)
         while not path_cache.not_visited_pages.empty():

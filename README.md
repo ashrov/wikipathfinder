@@ -2,7 +2,8 @@
 
 Wiki game solution implementation. Realised as API.
 
-`GET` request example `http://localhost:45678/path?start_path={start_url}&end_path={end_url}`
+`GET` request example `http://localhost:45678/path_by_urls?start_path={start_url}&end_path={end_url}`
+`GET` request example `http://localhost:45678/path_by_names?namespace={namespace}&start_path={start_name}&end_path={end_name}`
 
 ## Launch in docker
 
