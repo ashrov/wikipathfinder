@@ -3,7 +3,7 @@ version: "3"
 services:
   app:
     container_name: finder-api
-    build: ./
+    build: ./backend/
     environment:
       REDIS_HOST: redis_cache
     depends_on:
