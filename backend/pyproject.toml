@@ -4,7 +4,7 @@ name = "wikipathfinder"
 version = "0.2"
 description = "Wiki game solution implementation."
 authors = [
-    {name = "Anton Sharovo"}
+    {name = "Anton Sharov"}
 ]
 dependencies = [
     "aiohttp",
