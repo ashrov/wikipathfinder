@@ -47,13 +47,12 @@ class PathFinder:
         start_page: WikiPage = await self._get_actual_page_info(start.full_url)
         end_page: WikiPage = await self._get_actual_page_info(end.full_url)
 
-        print(f"Getting path between validated urls {start_page} - {end_page}")
-
         if start == end:
             raise BadUrlError("Equal start and end pages are not allowed")
 
-        path_cache = PathCache()
+        print(f"Getting path between validated urls {start_page} - {end_page}")
 
+        path_cache = PathCache()
         path_cache.not_visited_pages.put(start_page)
         while not path_cache.not_visited_pages.empty():
             current = path_cache.not_visited_pages.get()
