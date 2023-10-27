@@ -103,4 +103,4 @@ class PathFinder:
             if true_url and true_url[0]:
                 return WikiPage.from_full_url(parse.unquote_plus(true_url[0]))
             else:
-                raise BadUrlError("Cannot get wiki article for URL 'url'")
+                raise BadUrlError(f"Cannot get wiki article for URL '{url}'")
