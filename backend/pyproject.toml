@@ -1,7 +1,7 @@
 [project]
 
 name = "wikipathfinder"
-version = "0.1"
+version = "0.2"
 description = "Wiki game solution implementation."
 authors = [
     {name = "Anton Sharovo"}

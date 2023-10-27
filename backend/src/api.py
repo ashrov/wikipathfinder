@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from .cache import WikiPage
+from .exc import BadUrlError
 from .pathfinder import PathFinder
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,13 +36,16 @@ async def find_path_by_urls(start: str, end: str):
     :return: Path list if success.
     """
 
-    start_page = WikiPage.from_full_url(start)
-    end_page = WikiPage.from_full_url(end)
+    try:
+        start_page = WikiPage.from_full_url(start)
+        end_page = WikiPage.from_full_url(end)
 
-    print(f"Getting path from {start_page} to {end_page}")
-    path = await finder.find_path(start_page, end_page)
+        print(f"Getting path from {start_page} to {end_page}")
+        path = await finder.find_path(start_page, end_page)
 
-    return {"path": path}
+        return {"path": path}
+    except BadUrlError as er:
+        raise HTTPException(status_code=422, detail=f"Bad URL: {er}")
 
 
 @app.get("/path_by_names")
@@ -56,13 +60,16 @@ async def find_path_by_names(namespace: str, start: str, end: str):
     :return: Path list if success.
     """
 
-    start_page = WikiPage(namespace, start.strip())
-    end_page = WikiPage(namespace, end.strip())
+    try:
+        start_page = WikiPage(namespace, start.strip())
+        end_page = WikiPage(namespace, end.strip())
 
-    print(f"Getting path from {start_page} to {end_page}")
-    path = await finder.find_path(start_page, end_page)
+        print(f"Getting path from {start_page} to {end_page}")
+        path = await finder.find_path(start_page, end_page)
 
-    return {"path": path}
+        return {"path": path}
+    except BadUrlError as er:
+        raise HTTPException(status_code=422, detail=f"Bad page name: {er}")
 
 
 @app.get("/explore")
@@ -74,5 +81,8 @@ async def explore(start: str, count: int = 10000):
     :param count: Seen URLs count limit.
     """
 
-    await finder.explore(start, count)
-    return {"result": "success"}
+    try:
+        await finder.explore(start, count)
+        return {"result": "success"}
+    except BadUrlError as er:
+        raise HTTPException(status_code=422, detail=f"Bad URL: {er}")
