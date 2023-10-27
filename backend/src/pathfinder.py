@@ -19,6 +19,8 @@ class PathCache:
 
 
 class PathFinder:
+    CANONICAL_RE = re.compile(r"<link rel=\"canonical\" href=\"(?P<true_url>[^\"]+)\">")
+
     def __init__(self):
         self._cache = RedisCache()
 
@@ -38,15 +40,19 @@ class PathFinder:
                     path_cache.visited_pages.add(child)
                     path_cache.not_visited_pages.put(child)
 
-    async def find_path(self, start_page: WikiPage, end_page: WikiPage) -> list[str]:
-        if start_page == end_page:
-            raise BadUrlError("Equal start and end pages are not allowed")
-
-        if not start_page.page or not end_page.page:
+    async def find_path(self, start: WikiPage, end: WikiPage) -> list[str]:
+        if not start.page or not end.page:
             raise BadUrlError("Empty page")
 
-        path_cache = PathCache()
+        start_page: WikiPage = await self._get_actual_page_info(start.full_url)
+        end_page: WikiPage = await self._get_actual_page_info(end.full_url)
 
+        if start == end:
+            raise BadUrlError("Equal start and end pages are not allowed")
+
+        print(f"Getting path between validated urls {start_page} - {end_page}")
+
+        path_cache = PathCache()
         path_cache.not_visited_pages.put(start_page)
         while not path_cache.not_visited_pages.empty():
             current = path_cache.not_visited_pages.get()
@@ -89,7 +95,12 @@ class PathFinder:
 
     async def _get_actual_page_info(self, url: str) -> WikiPage:
         async with request("GET", url) as response:
-            if "no article" in await response.text():
+            if "noarticle" in await response.text():
                 raise BadUrlError(f"No article at '{url}'")
 
-            return WikiPage.from_full_url(parse.unquote_plus(url))
+            text = await response.text()
+            true_url = self.CANONICAL_RE.findall(text)
+            if true_url and true_url[0]:
+                return WikiPage.from_full_url(parse.unquote_plus(true_url[0]))
+            else:
+                raise BadUrlError(f"Cannot get wiki article for URL '{url}'")
