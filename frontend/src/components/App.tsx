@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import '../styles/App.css';
 import {InputFields} from "src/components/InputFields";
-import {getPathsResponse, getUsers, requestBody} from "src/ts/getPaths";
+import {getPathsResponse, getPaths, requestBody} from "src/ts/getPaths";
 import {Result} from "src/components/Result";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
         setIsLoading(true)
 
         //send request
-        getUsers(request)
+        getPaths(request)
             .then((response) => {
                 //response from API
                 setPaths(response);

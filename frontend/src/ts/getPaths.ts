@@ -14,7 +14,7 @@ export interface requestBody {
     end: string
 }
 
-export async function getUsers(request: requestBody) {
+export async function getPaths(request: requestBody) {
     try {
         const {data} = await axios.get<getPathsResponse>(
             'http://localhost:45678/path_by_names',
