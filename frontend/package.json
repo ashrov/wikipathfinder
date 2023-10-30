@@ -23,8 +23,8 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "prettier": "prettier . --ignore-path .gitignore",
-        "format:check": "npm run prettier -- --check",
-        "format:fix": "npm run prettier -- --write",
+        "format:check": "prettier . --ignore-path .gitignore --check",
+        "format:fix": "prettier . --ignore-path .gitignore --write",
         "lint": "eslint --ext .tsx,.ts .",
         "lint:fix": "eslint --ext .tsx,.ts . --fix",
         "type:check": "tsc",
@@ -36,8 +36,14 @@
         }
     },
     "lint-staged": {
-        "src/**/*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-        "src/**/*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write --ignore-unknown"
+        "*.ts": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.tsx": [
+            "eslint --fix",
+            "prettier --write"
+        ]
     },
     "browserslist": {
         "production": [
