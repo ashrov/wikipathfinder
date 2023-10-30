@@ -1,23 +1,23 @@
-import React, {useState} from 'react';
-import '../styles/App.css';
-import {InputFields} from "src/components/InputFields";
-import {getPaths, RequestBody, ServerData} from "src/ts/getPaths";
-import {Result} from "src/components/Result";
+import React, { useState } from "react";
+import "../styles/App.css";
+import { InputFields } from "src/components/InputFields";
+import { getPaths, RequestBody, ServerData } from "src/ts/getPaths";
+import { Result } from "src/components/Result";
 
 function App() {
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
+    const [start, setStart] = useState("");
+    const [end, setEnd] = useState("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [result, setResult] = useState<ServerData | string>('');
+    const [result, setResult] = useState<ServerData | string>("");
 
     function getPathsFromApi() {
         // Set loading
         setIsLoading(true);
 
         const request: RequestBody = {
-            namespace: 'ru',
-            start: start,
-            end: end,
+            namespace: "ru",
+            start,
+            end,
         };
 
         // GET request
@@ -33,14 +33,13 @@ function App() {
     }
 
     return (
-        <div className={"App"}>
+        <div className="App">
             <span>
                 {isLoading ? (
                     <div className="loader-line">Loading</div>
                 ) : (
                     <div>Not loading</div>
                 )}
-
             </span>
             <InputFields
                 start={start}
@@ -49,7 +48,7 @@ function App() {
                 setEnd={setEnd}
                 onClickButton={getPathsFromApi}
             />
-            <Result paths={result}/>
+            <Result paths={result} />
         </div>
     );
 }

@@ -1,18 +1,20 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export interface ServerData {
-    path: string[]
+    path: string[];
 }
 
 export interface RequestBody {
-    namespace: 'ru';
+    namespace: "ru";
     start: string;
     end: string;
 }
 
-const baseUrl = 'http://localhost:45678/path_by_names';
+const baseUrl = "http://localhost:45678/path_by_names";
 
-export const getPaths = async (request: RequestBody): Promise<ServerData | string> => {
+export const getPaths = async (
+    request: RequestBody,
+): Promise<ServerData | string> => {
     try {
         const response: AxiosResponse<ServerData> = await axios.get(baseUrl, {
             params: {
@@ -22,14 +24,14 @@ export const getPaths = async (request: RequestBody): Promise<ServerData | strin
             },
         });
 
-        const {data} = response;
+        const { data } = response;
 
         return data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             return (error as AxiosError).message;
-        } else {
-            return 'An unexpected error occurred';
         }
+
+        return "An unexpected error occurred";
     }
 };
