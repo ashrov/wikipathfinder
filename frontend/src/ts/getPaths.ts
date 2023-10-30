@@ -1,45 +1,35 @@
-import axios from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 
-export interface path {
-    link: string
+export interface ServerData {
+    path: string[]
 }
 
-export interface getPathsResponse {
-    data: path[];
+export interface RequestBody {
+    namespace: 'ru';
+    start: string;
+    end: string;
 }
 
-export interface requestBody {
-    namespace: 'ru'
-    start: string,
-    end: string
-}
+const baseUrl = 'http://localhost:45678/path_by_names';
 
-export async function getPaths(request: requestBody) {
+export const getPaths = async (request: RequestBody): Promise<ServerData | string> => {
     try {
-        const {data} = await axios.get<getPathsResponse>(
-            'http://localhost:45678/path_by_names',
-            {
-                params: {
-                    namespace: request.namespace,
-                    start: request.start,
-                    end: request.end
-                },
-                headers: {
-                    Accept: 'application/json',
-                },
+        const response: AxiosResponse<ServerData> = await axios.get(baseUrl, {
+            params: {
+                namespace: request.namespace,
+                start: request.start,
+                end: request.end,
             },
-        );
+        });
 
-        console.log(JSON.stringify(data, null, 4));
+        const {data} = response;
 
         return data;
-
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            return error.message;
+            return (error as AxiosError).message;
         } else {
             return 'An unexpected error occurred';
         }
     }
-}
-
+};

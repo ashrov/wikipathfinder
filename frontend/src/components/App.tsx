@@ -1,41 +1,47 @@
 import React, {useState} from 'react';
 import '../styles/App.css';
 import {InputFields} from "src/components/InputFields";
-import {getPathsResponse, getPaths, requestBody} from "src/ts/getPaths";
+import {getPaths, RequestBody, ServerData} from "src/ts/getPaths";
 import {Result} from "src/components/Result";
 
 function App() {
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
-    const [error, setError] = useState('');
-    const [paths, setPaths] = useState<string | getPathsResponse>()
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-
-    const request: requestBody = {
-        namespace: 'ru',
-        start: start,
-        end: end
-    };
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [result, setResult] = useState<ServerData | string>('');
 
     function getPathsFromApi() {
-        //set loading
-        setIsLoading(true)
+        // Set loading
+        setIsLoading(true);
 
-        //send request
+        const request: RequestBody = {
+            namespace: 'ru',
+            start: start,
+            end: end,
+        };
+
+        // GET request
         getPaths(request)
             .then((response) => {
-                //response from API
-                setPaths(response);
-                console.log(typeof response)
+                setResult(response);
+                setIsLoading(false);
             })
             .catch((error) => {
-                //Error from API
-                setError(error.message)
+                setResult(error);
+                setIsLoading(false);
             });
     }
 
     return (
         <div className={"App"}>
+            <span>
+                {isLoading ? (
+                    <div className="loader-line">Loading</div>
+                ) : (
+                    <div>Not loading</div>
+                )}
+
+            </span>
             <InputFields
                 start={start}
                 end={end}
@@ -43,7 +49,7 @@ function App() {
                 setEnd={setEnd}
                 onClickButton={getPathsFromApi}
             />
-            <Result paths={paths}/>
+            <Result paths={result}/>
         </div>
     );
 }

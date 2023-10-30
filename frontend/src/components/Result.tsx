@@ -1,20 +1,26 @@
-import React from "react";
-import {getPathsResponse} from "src/ts/getPaths";
+import React from 'react';
+import {ServerData} from "src/ts/getPaths";
 
 interface ResultProps {
-    paths: string | getPathsResponse | undefined,
+    paths: ServerData | string;
 }
 
 export function Result({paths}: ResultProps) {
-    console.log("down")
-    console.log(paths)
-
-    return (
-        <div className="links-container">
-            <p className="result-header">Result:</p>
-            <div className={"links"}>
-                {}
+    if (typeof paths === 'object') {
+        return (
+            <ul>
+                {paths.path.map((link, index) => (
+                    <div className={"wrapper"} key={index}>
+                        <a className="first after" href={link}>{link}</a><br/>
+                    </div>
+                ))}
+            </ul>
+        );
+    } else {
+        return (
+            <div>
+                <p>{paths}</p>
             </div>
-        </div>
-    )
+        );
+    }
 }
