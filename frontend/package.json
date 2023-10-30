@@ -11,6 +11,7 @@
         "@types/react": "^18.2.33",
         "@types/react-dom": "^18.2.14",
         "axios": "^1.6.0",
+        "eslint": "^8.52.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-scripts": "5.0.1",
@@ -27,13 +28,7 @@
         "format:fix": "prettier . --ignore-path .gitignore --write",
         "lint": "eslint --ext .tsx,.ts .",
         "lint:fix": "eslint --ext .tsx,.ts . --fix",
-        "type:check": "tsc",
-        "prepare": "husky install"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
+        "type:check": "tsc"
     },
     "lint-staged": {
         "*.ts": [
@@ -59,7 +54,6 @@
     },
     "devDependencies": {
         "@typescript-eslint/parser": "^6.9.0",
-        "eslint": "^8.52.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-typescript": "^17.1.0",
         "eslint-config-prettier": "^9.0.0",
