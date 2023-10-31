@@ -54,7 +54,6 @@ class RedisCache:
 
     async def save(self, page: WikiPage, children: set[WikiPage]) -> None:
         key = self._KEY_PATTERN.format(page=page)
-
         await self._redis.delete(key)
 
         raw_children = {self._KEY_PATTERN.format(page=child) for child in children}

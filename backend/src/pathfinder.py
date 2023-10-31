@@ -20,6 +20,7 @@ class PathCache:
 
 class PathFinder:
     CANONICAL_RE = re.compile(r"<link rel=\"canonical\" href=\"(?P<true_url>[^\"]+)\">")
+    YEAR_RE = re.compile(r"\d{4}(_.+)?")
 
     def __init__(self):
         self._cache = RedisCache()
@@ -70,7 +71,7 @@ class PathFinder:
     def _restore_path(self, path_cache: PathCache, start: WikiPage, end: WikiPage) -> list[str]:
         path: list[str] = [end.full_url]
         current = end
-        print(f"Finding path between {end} and {start}")
+        print(f"Restoring path between {start} and {end}")
         while current != start:
             current = path_cache.paths.get(current)
             path.insert(0, current.full_url)
@@ -78,18 +79,19 @@ class PathFinder:
         return path
 
     async def get_children(self, page: WikiPage) -> set[WikiPage]:
-        if cached := await self._cache.get(page):
-            return cached
+        children = await self._cache.get(page)
 
-        async with request("GET", page.full_url) as response:
-            response_text = await response.text()
+        if not children:
+            async with request("GET", page.full_url) as response:
+                response_text = await response.text()
 
-        children = {
-            WikiPage(page.namespace, parse.unquote_plus(href).replace("/wiki/", ""))
-            for href in _WIKI_URL_RE.findall(response_text)
-        }
+            children = {
+                WikiPage(page.namespace, parse.unquote_plus(href).replace("/wiki/", ""))
+                for href in _WIKI_URL_RE.findall(response_text)
+            }
+            await self._cache.save(page, children)
 
-        await self._cache.save(page, children)
+        children = {child for child in children if not self.YEAR_RE.match(child.page)}
 
         return children
 
