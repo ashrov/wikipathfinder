@@ -1,5 +1,12 @@
+html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 body {
-    background-color: #282c34;
+    background-color: #0b0d1e;
     color: white;
     margin: 0;
     font-family: "Open Sans", sans-serif;
