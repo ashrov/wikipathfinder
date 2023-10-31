@@ -1,4 +1,6 @@
+/* eslint-disable */
 import React, { ChangeEvent } from "react";
+import "../styles/InputFields.css";
 
 interface InputProps {
     start: string;
@@ -24,37 +26,37 @@ export function InputFields({
     };
 
     return (
-        <div className="form-row">
-            <div className="form__group">
-                <input
-                    type="text"
-                    className="form__field"
-                    placeholder="Start"
-                    name="start"
-                    id="start"
-                    value={start}
-                    onChange={handleStartChange}
-                    required
-                />
-                <label htmlFor="start" className="form__label">
-                    Start
-                </label>
-            </div>
+        <div className={"input-area"}>
+            <div className="form-row">
+                <div className="input-container">
+                    <input
+                        type="text"
+                        id="start"
+                        required
+                        value={start}
+                        onChange={handleStartChange}
+                        autoComplete="off"
+                    />
+                    <label htmlFor="input" className="label">
+                        Start
+                    </label>
+                    <div className="underline" />
+                </div>
 
-            <div className="form__group">
-                <input
-                    type="text"
-                    className="form__field"
-                    placeholder="End"
-                    name="end"
-                    id="end"
-                    value={end}
-                    onChange={handleEndChange}
-                    required
-                />
-                <label htmlFor="end" className="form__label">
-                    End
-                </label>
+                <div className="input-container">
+                    <input
+                        type="text"
+                        id="end"
+                        required
+                        value={end}
+                        onChange={handleEndChange}
+                        autoComplete="off"
+                    />
+                    <label htmlFor="input" className="label">
+                        End
+                    </label>
+                    <div className="underline" />
+                </div>
             </div>
             <button className="button" onClick={onClickButton}>
                 <svg

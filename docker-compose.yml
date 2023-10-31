@@ -24,7 +24,7 @@ services:
         container_name: finder-client
         build: ./frontend/
         ports:
-          - '3000:3000'
+          - '8080:3000'
         volumes:
           - ./frontend:/app
           - /app/node_modules
