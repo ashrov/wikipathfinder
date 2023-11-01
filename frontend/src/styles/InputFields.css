@@ -39,20 +39,27 @@
     color: rgb(115, 115, 115);
 }
 
+.input-container
+    input[type="text"]:not(:focus):not(:placeholder-shown)
+    + .label {
+    color: rgb(255, 255, 255);
+}
+
 .input-container .underline {
     position: absolute;
     bottom: 0;
     left: 0;
     height: 2px;
     width: 100%;
-    background-color: rgb(255, 255, 255);
-    transform: scaleX(0);
-    transition: all 0.3s ease;
+    background-color: transparent;
+    transition:
+        transform 0.3s ease,
+        background-color 0.3s ease;
 }
 
 .input-container input[type="text"]:focus ~ .underline,
 .input-container input[type="text"]:valid ~ .underline {
-    transform: scaleX(1);
+    background-color: #f5f5f5;
 }
 
 .input-container + .input-container {
