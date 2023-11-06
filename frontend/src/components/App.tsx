@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 import "../styles/App.css";
 import { InputFields } from "src/components/InputFields";
@@ -36,7 +37,8 @@ function App() {
         <div className="App">
             <span>
                 {isLoading ? (
-                    <div className="loader-line">Loading</div>
+                    <div className="loader">
+                    </div>
                 ) : (
                     <div>Not loading</div>
                 )}
@@ -48,6 +50,8 @@ function App() {
                 setEnd={setEnd}
                 onClickButton={getPathsFromApi}
             />
+            <span className={"result-header"}>Result</span>
+
             <Result paths={result} />
         </div>
     );

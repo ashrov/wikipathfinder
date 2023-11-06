@@ -1,4 +1,6 @@
+/* eslint-disable */
 import React from "react";
+import "../styles/Result.css";
 import { ServerData } from "src/ts/getPaths";
 
 interface ResultProps {
@@ -8,7 +10,7 @@ interface ResultProps {
 export function Result({ paths }: ResultProps) {
     if (typeof paths === "object") {
         return (
-            <ul>
+            <div className={"links-container"}>
                 {paths.path.map((link, index) => (
                     <div className="wrapper" key={index}>
                         <a className="first after" href={link}>
@@ -17,7 +19,7 @@ export function Result({ paths }: ResultProps) {
                         <br />
                     </div>
                 ))}
-            </ul>
+            </div>
         );
     }
     return (
